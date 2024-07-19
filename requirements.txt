@@ -1,0 +1,7 @@
+requests
+numpy
+Pillow
+pillow-avif-plugin
+removebg #idk about this one. it's not needed but i want to keep it here to remember it exists
+opencv-python
+python-dotenv
