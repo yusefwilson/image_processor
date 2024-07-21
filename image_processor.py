@@ -1,15 +1,15 @@
+import sys
+import os
 import requests
 from PIL import Image
 from io import BytesIO
 import cv2
 import numpy as np
 import pillow_avif #only to remind you to have this pip installed
-import sys
-import os
 from dotenv import load_dotenv
 
 # Function to download image
-def download_image(url):
+def download_image(url: str) -> Image:
     response = requests.get(url)
     if response.status_code == 200:
         img = Image.open(BytesIO(response.content))
@@ -18,12 +18,12 @@ def download_image(url):
         raise Exception('Image could not be retrieved')
 
 # Function to convert image to PNG
-def convert_to_png(image):
+def convert_to_png(image: Image) -> Image:
     png_image = image.convert('RGBA')
     return png_image
 
 # Function to remove background using removebg API
-def remove_background(image_path, api_key):
+def remove_background(image_path: str, api_key: str) -> Image:
     with open(image_path, 'rb') as file:
         response = requests.post(
             'https://api.remove.bg/v1.0/removebg',
@@ -38,7 +38,7 @@ def remove_background(image_path, api_key):
             raise Exception('Error:', response.status_code, response.text)
         
 # Function to add a white outline
-def add_white_outline(image, outline_width=10, blur_radius=5):
+def add_white_outline(image: Image, outline_width: int=10, blur_radius: int=5) -> Image:
     # Convert image to numpy array
     np_image = np.array(image)
     
@@ -73,11 +73,11 @@ def add_white_outline(image, outline_width=10, blur_radius=5):
     return outlined_image
 
 # Function to rename image
-def rename_image(image, new_name):
+def rename_image(image: Image, new_name: str) -> None:
     image.save(new_name)
 
 # Main function
-def process_image(url, api_key, new_name):
+def process_image(url: str, api_key: str, new_name: str) -> None:
     # Download the image
     image = download_image(url)
     
@@ -106,7 +106,7 @@ load_dotenv()
 # Retrieve the API key from the environment variables
 REMOVE_BG_API_KEY = os.getenv('REMOVE_BG_API_KEY')
 
-def main():
+def main() -> None:
 
     if len(sys.argv) != 3:
         print('Usage: python image_processor.py <image_url> <new_name>')
