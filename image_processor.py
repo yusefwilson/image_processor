@@ -5,7 +5,6 @@ from PIL import Image
 from io import BytesIO
 import cv2
 import numpy as np
-import pillow_avif #only to remind you to have this pip installed
 from dotenv import load_dotenv
 
 # Function to download image
@@ -78,8 +77,13 @@ def rename_image(image: Image, new_name: str) -> None:
 
 # Main function
 def process_image(url: str, api_key: str, new_name: str) -> None:
-    # Download the image
-    image = download_image(url)
+
+    # Download the image if it is an internet url, otherwise assume it is a local file
+    image = None
+    if url.startswith('http'):
+        image = download_image(url)
+    else:
+        image = Image.open(url)
     
     # Convert to PNG
     png_image = convert_to_png(image)
